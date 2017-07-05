@@ -12,9 +12,10 @@ class purge():
     @commands.command(pass_context=True)
     async def purge(self, context):
         last_week = datetime.datetime.now() - datetime.timedelta(days=7)
-        # deleted = await self.bot.purge_from(context.message.channel, limit=10000000000000, before=last_week)
-        # await self.bot.send_message(context.message.channel, 'Deleted {} message(s)'.format(len(deleted)))
         async for msg in self.bot.logs_from(context.message.channel, limit=10000000000000, before=last_week):
+            if msg.pinned:
+                continue
+
             stringTime = msg.timestamp.strftime("%Y-%m-%d %H:%M")
             try:
                 author = msg.author
