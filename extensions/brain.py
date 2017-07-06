@@ -3,6 +3,8 @@ from cobe.brain import Brain
 import re
 
 brain = Brain("nibbler.brain")
+# the channels we want the bot to learn from
+channels = ['260858852776476672']
 
 class Brain():
     def __init__(self, bot):
@@ -10,7 +12,7 @@ class Brain():
 
     async def on_message(self, message):
         mention = commands.bot.when_mentioned(self.bot, message).strip()
-        if message.author.mention == mention:
+        if message.author.mention == mention or message.content.startswith('!'):
             return
 
         reply = None
@@ -25,7 +27,8 @@ class Brain():
                 except RetryException:
                     reply = None
 
-        if content and len(content) >= 4:
+
+        if content and len(content) >= 4 and message.channel.id in channels:
             print('Learning from: {}'.format(content))
             brain.learn(content)
 
