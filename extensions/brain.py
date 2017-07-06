@@ -17,7 +17,7 @@ class Brain():
 
         reply = None
         content = re.sub(r'<@.*?>', '', message.content).strip()
-        if message.content.startswith(mention):
+        if message.content.startswith(mention) or message.channel.is_private:
             while reply == None:
                 try:
                     reply = brain.reply(content)
