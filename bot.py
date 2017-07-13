@@ -21,8 +21,8 @@ extensions = [
     'extensions.laura',
     'extensions.brain',
     'extensions.utils',
-    'extensions.reddit'
-    # 'extensions.purge',
+    'extensions.reddit',
+    'extensions.purge'
     # 'extensions.moderator'
 ]
 
