@@ -24,7 +24,7 @@ extensions = [
     'extensions.utils',
     'extensions.reddit',
     'extensions.purge'
-    'extensions.moderator'
+    # 'extensions.moderator'
 ]
 
 # silence discord.py
