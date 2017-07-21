@@ -17,13 +17,14 @@ Hello! Do you remember some months ago when the Earth was under attack by flying
 
 extensions = [
     'extensions.rng',
+    'extensions.timer'
     'extensions.member',
     'extensions.laura',
     'extensions.brain',
     'extensions.utils',
     'extensions.reddit',
     'extensions.purge'
-    # 'extensions.moderator'
+    'extensions.moderator'
 ]
 
 # silence discord.py
