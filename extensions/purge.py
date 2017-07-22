@@ -5,7 +5,9 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 class purge():
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -27,7 +29,8 @@ class purge():
 
             await self.bot.delete_message(msg)
 
-            log.info(template.format(stringTime=stringTime, author=author, message=message)[:-1])
+            log.info(template.format(stringTime=stringTime,
+                                     author=author, message=message)[:-1])
 
 
 def setup(bot):

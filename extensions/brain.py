@@ -6,7 +6,9 @@ brain = Brain("nibbler.brain")
 # the channels we want the bot to learn from
 channels = ['260858852776476672']
 
+
 class Brain():
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -27,10 +29,10 @@ class Brain():
                 except RetryException:
                     reply = None
 
-
         if content and len(content) >= 4 and message.channel.id in channels:
             print('Learning from: {}'.format(content))
             brain.learn(content)
+
 
 def setup(bot):
     bot.add_cog(Brain(bot))

@@ -4,12 +4,14 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 class Moderator():
+
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(no_pm=True)
-    async def kick(self, *, member : discord.Member):
+    async def kick(self, *, member: discord.Member):
         try:
             await self.bot.kick(member)
         except discord.Forbidden:
@@ -20,7 +22,7 @@ class Moderator():
             await self.bot.say('\U0001f44c')
 
     @commands.command(no_pm=True)
-    async def ban(self, *, member : discord.Member):
+    async def ban(self, *, member: discord.Member):
         try:
             await self.bot.ban(member)
         except discord.Forbidden:
@@ -42,6 +44,7 @@ class Moderator():
             await self.bot.say('Unbanning failed.')
         else:
             await self.bot.say('\U0001f44c')
+
 
 def setup(bot):
     bot.add_cog(Moderator(bot))

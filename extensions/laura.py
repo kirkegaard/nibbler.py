@@ -3,7 +3,9 @@ from discord.ext import commands
 
 laura_id = '205282372743069696'
 
+
 class Laura():
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -22,6 +24,7 @@ class Laura():
 
         if msg is not None:
             await self.bot.send_message(message.channel, msg)
+
 
 def setup(bot):
     bot.add_cog(Laura(bot))

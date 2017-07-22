@@ -1,6 +1,7 @@
 from discord.ext import commands
 import datetime
-import json, asyncio
+import json
+import asyncio
 import logging
 import sys
 
@@ -17,7 +18,7 @@ Hello! Do you remember some months ago when the Earth was under attack by flying
 
 extensions = [
     'extensions.rng',
-    'extensions.timer'
+    'extensions.timer',
     'extensions.member',
     'extensions.laura',
     'extensions.brain',
@@ -32,7 +33,8 @@ extensions = [
 discord_logger = logging.getLogger('discord')
 discord_logger.setLevel(logging.CRITICAL)
 
-handler = logging.FileHandler(filename='nibbler.log', encoding='utf-8', mode='w')
+handler = logging.FileHandler(
+    filename='nibbler.log', encoding='utf-8', mode='w')
 logging.basicConfig(format='%(asctime)-15s %(message)s')
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -41,12 +43,14 @@ log.addHandler(handler)
 help_attrs = dict(hidden=True)
 
 prefix = ['!']
-bot = commands.Bot(command_prefix=prefix, description=description, pm_help=None, help_attrs=help_attrs)
+bot = commands.Bot(command_prefix=prefix, description=description,
+                   pm_help=None, help_attrs=help_attrs)
 
 
 @bot.event
 async def on_ready():
     print('Ready Eddy!')
+
 
 @bot.event
 async def on_message(message):
@@ -69,7 +73,8 @@ if __name__ == '__main__':
             bot.load_extension(extension)
             print('Loaded extension: {}'.format(extension))
         except Exception as e:
-            print('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
+            print('Failed to load extension {}\n{}: {}'.format(
+                extension, type(e).__name__, e))
 
     bot.run(token)
     handlers = log.handlers[:]

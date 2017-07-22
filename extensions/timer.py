@@ -2,7 +2,9 @@ import asyncio
 from datetime import datetime, timedelta
 from discord.ext import commands
 
+
 class Timer():
+
     def __init__(self, bot, loop=None):
         self.bot = bot
         self.loop = loop or asyncio.get_event_loop()
@@ -16,16 +18,18 @@ class Timer():
         later = then - now
         message = ' '.join(msg)
 
-        if then < now :
+        if then < now:
             await self.bot.say('{} Sorry, thats in the past!'.format(context.message.author.mention))
             return
 
         await self.bot.say('{} I got you fam!'.format(context.message.author.mention))
 
         def send():
-            asyncio.ensure_future(self.bot.send_message(context.message.author, message), loop=self.loop)
+            asyncio.ensure_future(self.bot.send_message(
+                context.message.author, message), loop=self.loop)
 
         self.loop.call_at(self.loop.time() + later.seconds, send)
+
 
 def setup(bot):
     bot.add_cog(Timer(bot))

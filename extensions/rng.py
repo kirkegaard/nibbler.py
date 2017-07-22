@@ -22,9 +22,11 @@ EIGHTBALL = [
     'My sources say no',
     'Outlook not so good',
     'Very doubtful'
-];
+]
+
 
 class RNG():
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -33,7 +35,7 @@ class RNG():
         await self.bot.say(random.choice(EIGHTBALL))
 
     @commands.command()
-    async def roll(self, dice : str):
+    async def roll(self, dice: str):
         """Rolls a dice in NdN format."""
         try:
             rolls, limit = map(int, dice.split('d'))
@@ -45,7 +47,7 @@ class RNG():
         await self.bot.say(result)
 
     @commands.command(description='For when you wanna settle the score some other way')
-    async def choose(self, *choices : str):
+    async def choose(self, *choices: str):
         """Chooses between multiple choices."""
         await self.bot.say(random.choice(choices))
 
