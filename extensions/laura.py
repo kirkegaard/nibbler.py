@@ -1,7 +1,7 @@
 from random import randint
 from discord.ext import commands
 
-laura_id = '205282372743069696'
+laura_id = [205282372743069696]
 
 
 class Laura():
@@ -10,8 +10,8 @@ class Laura():
         self.bot = bot
 
     async def on_message(self, message):
-        if message.author.id == laura_id and sum(1 for c in message.content if c.isupper()) > 10:
-            await self.bot.send_message(message.channel, 'Dæmp dig Laura')
+        if message.author.id in laura_id and sum(1 for c in message.content if c.isupper()) > 10:
+            await message.channel.send('Dæmp dig Laura')
 
         rand = randint(0, 1000)
         msg = None
@@ -23,7 +23,7 @@ class Laura():
             msg = 'Hold kæft Laura!'
 
         if msg is not None:
-            await self.bot.send_message(message.channel, msg)
+            await message.channel.send(msg)
 
 
 def setup(bot):

@@ -1,82 +1,61 @@
-from discord.ext import commands
 import datetime
 import json
 import asyncio
 import logging
 import sys
+import discord
+import traceback
 
-try:
-    import uvloop
-except ImportError:
-    pass
-else:
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+from discord.ext import commands
+from utils import config
 
-description = """
-Hello! Do you remember some months ago when the Earth was under attack by flying brains?
-"""
-
-extensions = [
-    'extensions.rng',
-    'extensions.timer',
-    'extensions.member',
-    'extensions.laura',
-    'extensions.brain',
-    'extensions.utils',
-    'extensions.reddit'
-    # 'extensions.moderator'
-]
-
-# silence discord.py
-# @TODO fix this
-discord_logger = logging.getLogger('discord')
-discord_logger.setLevel(logging.CRITICAL)
-
-handler = logging.FileHandler(
-    filename='nibbler.log', encoding='utf-8', mode='w')
-logging.basicConfig(format='%(asctime)-15s %(message)s')
-log = logging.getLogger()
-log.setLevel(logging.INFO)
-log.addHandler(handler)
-
-help_attrs = dict(hidden=True)
-
-prefix = ['!']
-bot = commands.Bot(command_prefix=prefix, description=description,
-                   pm_help=None, help_attrs=help_attrs)
+log = logging.getLogger(__name__)
 
 
-@bot.event
-async def on_ready():
-    print('Ready Eddy!')
+class Nibbler(commands.AutoShardedBot):
+    """Nibbler"""
 
+    def __init__(self):
+        self.config = config.Config('config/bot.json')
+        self.token = self.config['token']
+        self.prefix = self.config['prefix']
+        self.description = self.config['description']
 
-@bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
+        super().__init__(command_prefix=self.prefix, description=self.description,
+                         pm_help=None, help_attrs=dict(hidden=True))
 
-    await bot.process_commands(message)
+        for extension in self.config['extensions']:
+            try:
+                self.load_extension('extensions.' + extension)
+                print('Loaded extension: {}'.format(extension))
+            except Exception as e:
+                print(f'Failed to load extension {extension}.', file=sys.stderr)
+                traceback.print_exc()
 
+        self.run(self.token)
 
-if __name__ == '__main__':
-    with open('credentials.json') as creds:
-        credentials = json.load(creds)
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.NoPrivateMessage):
+            await ctx.author.send('This command cannot be used in private messages.')
+        elif isinstance(error, commands.DisabledCommand):
+            await ctx.author.send('Sorry. This command is disabled and cannot be used.')
+        elif isinstance(error, commands.CommandInvokeError):
+            print(f'In {ctx.command.qualified_name}:', file=sys.stderr)
+            traceback.print_tb(error.original.__traceback__)
+            print(f'{error.original.__class__.__name__}: {error.original}', file=sys.stderr)
 
-    debug = any('debug' in arg.lower() for arg in sys.argv)
-    token = credentials['token']
-    bot.owner_id = credentials['owner_id']
+    async def on_ready(self):
+        if not hasattr(self, 'uptime'):
+            self.uptime = datetime.datetime.utcnow()
 
-    for extension in extensions:
-        try:
-            bot.load_extension(extension)
-            print('Loaded extension: {}'.format(extension))
-        except Exception as e:
-            print('Failed to load extension {}\n{}: {}'.format(
-                extension, type(e).__name__, e))
+        print(f'Ready: {self.user} (ID: {self.user.id})')
 
-    bot.run(token)
-    handlers = log.handlers[:]
-    for hdlr in handlers:
-        hdlr.close()
-        log.removeHandler(hdlr)
+    async def on_resumed(self):
+        print('Resumed...')
+
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        await self.process_commands(message)
+
+nibbler = Nibbler()

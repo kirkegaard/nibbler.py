@@ -9,7 +9,7 @@ class Timer():
         self.bot = bot
         self.loop = loop or asyncio.get_event_loop()
 
-    @commands.command(pass_context=True, description="Sends you a reminder at a given time. Use the time format hh:mm")
+    @commands.command(aliases=["alarm", "timer"], pass_context=True, description="Sends you a reminder at a given time. Use the time format hh:mm")
     async def alert(self, context, time, * message):
         """Get a reminder"""
         time = list(map(int, time.split(':')))
@@ -20,14 +20,14 @@ class Timer():
         message = ' '.join(message)
 
         if then < now:
-            await self.bot.say('{} Sorry, thats in the past!'.format(context.message.author.mention))
+            await context.send('{} Sorry, thats in the past!'.format(context.message.author.mention))
             return
 
-        await self.bot.say('{} I got you fam!'.format(context.message.author.mention))
+        await context.send('{} I got you fam!'.format(context.message.author.mention))
 
         def send():
-            asyncio.ensure_future(self.bot.send_message(
-                context.message.author, message), loop=self.loop)
+            asyncio.ensure_future(
+                context.message.author.send(message), loop=self.loop)
 
         self.loop.call_at(self.loop.time() + later.seconds, send)
 

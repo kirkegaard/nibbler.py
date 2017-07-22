@@ -31,26 +31,26 @@ class RNG():
         self.bot = bot
 
     @commands.command(name='8ball')
-    async def eightball(self, question: str):
+    async def eightball(self, context, question: str):
         """Ask the magic 8 ball anything"""
-        await self.bot.say(random.choice(EIGHTBALL))
+        await context.send(random.choice(EIGHTBALL))
 
     @commands.command()
-    async def roll(self, dice: str):
+    async def roll(self, context, dice: str):
         """Rolls a dice in NdN format."""
         try:
             rolls, limit = map(int, dice.split('d'))
         except Exception:
-            await self.bot.say('Format has to be in NdN!')
+            await context.send('Format has to be in NdN!')
             return
 
         result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-        await self.bot.say(result)
+        await context.send(result)
 
     @commands.command(description='For when you wanna settle the score some other way')
-    async def choose(self, *choices: str):
+    async def choose(self, context, *choices: str):
         """Chooses between multiple choices."""
-        await self.bot.say(random.choice(choices))
+        await context.send(random.choice(choices))
 
 
 def setup(bot):

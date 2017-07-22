@@ -2,9 +2,9 @@ from discord.ext import commands
 from cobe.brain import Brain
 import re
 
-brain = Brain("nibbler.brain")
+brain = Brain("tmp/nibbler.brain")
 # the channels we want the bot to learn from
-channels = ['260858852776476672']
+channels = [260858852776476672]
 
 
 class Brain():
@@ -13,23 +13,22 @@ class Brain():
         self.bot = bot
 
     async def on_message(self, message):
-        mention = commands.bot.when_mentioned(self.bot, message).strip()
-        if message.author.mention == mention or message.content.startswith('!'):
+        if message.author.mention == self.bot.user.mention or message.content.startswith('!'):
             return
 
         reply = None
         content = re.sub(r'<@.*?>', '', message.content).strip()
-        if message.content.startswith(mention) or message.channel.is_private:
+        if message.content.startswith(self.bot.user.mention):
             while reply == None:
                 try:
                     reply = brain.reply(content)
-                    await self.bot.send_message(message.channel, '{} {}'.format(message.author.mention, reply))
+                    await message.channel.send('{} {}'.format(message.author.mention, reply))
                 except AbortException:
                     return False
                 except RetryException:
                     reply = None
 
-        if content and len(content) >= 4 and message.channel.id in channels:
+        if len(content) >= 4 and message.channel.id in channels:
             print('Learning from: {}'.format(content))
             brain.learn(content)
 

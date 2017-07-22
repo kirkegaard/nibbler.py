@@ -34,15 +34,15 @@ class Reddit():
     @commands.command(pass_context=True)
     async def porn(self, context):
         """Fetches a random picture from subreddits. *NSFW channels only"""
-        if 'nsfw' not in context.message.channel.name:
-            await self.bot.say("This isnt a nsfw channel")
+        if not context.message.channel.is_nsfw():
+            await context.send("This isnt a nsfw channel")
             return
 
         endpoint = 'http://reddit.com/r/{}/random/.json'.format(
             random.choice(SUBREDDITS_PORN))
         data = requests.get(endpoint, headers=headers).json()
         msg = data[0]["data"]["children"][0]["data"]["url"]
-        await self.bot.say(msg)
+        await context.send(msg)
 
 
 def setup(bot):
