@@ -33,7 +33,7 @@ class Reddit():
 
     @commands.command(pass_context=True)
     async def porn(self, context):
-        """Fetches a random picture or gif from a bunch of subreddits. *Only works in NSFW channels"""
+        """Fetches a random picture from subreddits. *NSFW channels only"""
         if 'nsfw' not in context.message.channel.name:
             await self.bot.say("This isnt a nsfw channel")
             return
