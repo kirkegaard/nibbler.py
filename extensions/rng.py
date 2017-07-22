@@ -31,7 +31,7 @@ class RNG():
         self.bot = bot
 
     @commands.command(name='8ball')
-    async def eightball(self):
+    async def eightball(self, question: str):
         """Ask the magic 8 ball anything"""
         await self.bot.say(random.choice(EIGHTBALL))
 
