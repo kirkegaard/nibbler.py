@@ -11,6 +11,7 @@ class Timer():
 
     @commands.command(pass_context=True)
     async def alert(self, context, time, * msg):
+        """Set a timer and get a notification"""
         time = list(map(int, time.split(':')))
 
         now = datetime.now()
