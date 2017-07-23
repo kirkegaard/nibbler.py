@@ -33,7 +33,7 @@ class Search():
         endpoint = "https://api.fixer.io/latest?symbols={},{}".format(f, t)
         res = requests.get(endpoint).json()
 
-        await context.send('{} {} == {} {}'.format(v, f, v * res['rates'][t], t))
+        await context.send('Result: {} {}'.format(v * res['rates'][t], t))
 
     @commands.command()
     async def imdb(self, context, *query: str):
