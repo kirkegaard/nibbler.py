@@ -31,7 +31,7 @@ class Reddit():
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def porn(self, context):
         """Fetches a random picture from subreddits. *NSFW channels only"""
         if not context.message.channel.is_nsfw():

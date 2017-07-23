@@ -12,6 +12,13 @@ class Utils():
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command()
+    async def ping(self, context):
+        """Pings the bot"""
+        msg = await context.channel.send('Pong!!!')
+        lag = msg.created_at - context.message.created_at
+        await msg.edit(content='Pong!!! ({}ms)'.format(lag.microseconds / 100))
+
     @commands.command(name='reload')
     async def _reload(self, context, extension_name: str):
         """Reload an extension"""
@@ -40,7 +47,7 @@ class Utils():
         self.bot.unload_extension('extensions.' + extension_name)
         await context.send("{} unloaded.".format(extension_name))
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def purge(self, context):
         """Clean up the channel history"""
         await context.message.delete()
