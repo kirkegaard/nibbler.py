@@ -23,7 +23,7 @@ class Search():
         result = google.search_videos(' '.join(query), num=1)
         await context.channel.send(next(result))
 
-    @commands.command(aliases=['c'])
+    @commands.command(aliases=['c', 'calc'])
     async def valuta(self, context, *query: str):
         """Converts a valuta through google finance"""
         v = float(query[0])
