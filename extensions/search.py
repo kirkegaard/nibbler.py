@@ -34,7 +34,7 @@ class Search():
             title='{} ({})'.format(res.title, res.year),
             description='Rating: {}\nGenres: {}\nPlot: {}'.format(
                 res.rating, ', '.join(res.genres), res.plot_outline),
-            url='https://imdb.com/title/{}'.format(res.imdb_id)
+            url='https://www.imdb.com/title/{}'.format(res.imdb_id)
         )
         msg.set_image(url=res.poster_url)
 
