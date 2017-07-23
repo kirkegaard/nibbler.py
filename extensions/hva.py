@@ -15,9 +15,9 @@ class Hva():
             return
 
         channel = message.channel.id
-        match = re.match(r'^(?i)a?hvad?', message.content)
+        hva = tuple(['hva', 'hva?', 'ahva', 'ahva?', 'hvad', 'hvad?'])
 
-        if match:
+        if message.content.startswith(hva) and message.content.endswith(hva):
             if not self.latest[channel]:
                 return
 
