@@ -1,3 +1,4 @@
+import re
 import discord
 import requests
 import google
@@ -21,6 +22,18 @@ class Search():
         """Searches google video (youtube) and returns the first result"""
         result = google.search_videos(' '.join(query), num=1)
         await context.channel.send(next(result))
+
+    @commands.command(aliases=['c'])
+    async def valuta(self, context, *query: str):
+        """Converts a valuta through google finance"""
+        v = float(query[0])
+        f = query[1].upper()
+        t = query[3].upper()
+
+        endpoint = "https://api.fixer.io/latest?symbols={},{}".format(f, t)
+        res = requests.get(endpoint).json()
+
+        await context.send('{} {} == {} {}'.format(v, f, v * res['rates'][t], t))
 
     @commands.command()
     async def imdb(self, context, *query: str):
