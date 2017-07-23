@@ -32,7 +32,8 @@ class Search():
         msg = discord.Embed(
             colour=0xffff00,
             title='{} ({})'.format(res.title, res.year),
-            description=res.plot_outline,
+            description='Rating: {}\nGenres: {}\nPlot: {}'.format(
+                res.rating, ', '.join(res.genres), res.plot_outline),
             url='https://imdb.com/title/{}'.format(res.imdb_id)
         )
         msg.set_image(url=res.poster_url)
