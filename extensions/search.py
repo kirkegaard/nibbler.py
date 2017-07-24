@@ -49,21 +49,21 @@ class Search():
         youtube = build('youtube', 'v3',
                         developerKey=self.params_google['key'])
         query = youtube.search().list(q=' '.join(
-            query), part="snippet", maxResults=1).execute()
+            query), part="id, snippet", maxResults=1).execute()
         res = query.get('items', [])
 
         videoId = res[0]['id']['videoId']
-        res = res[0]['snippet']
+        # res = res[0]['snippet']
 
-        msg = discord.Embed(
-            colour=0xDF080E,
-            title=res['title'],
-            description=res['description'],
-            url='https://www.youtube.com/watch?v={}'.format(videoId)
-        )
-        msg.set_image(url=res['thumbnails']['high']['url'])
+        # msg = discord.Embed(
+        #     colour=0xDF080E,
+        #     title=res['title'],
+        #     description=res['description'],
+        #     url='https://www.youtube.com/watch?v={}'.format(videoId)
+        # )
+        # msg.set_image(url=res['thumbnails']['high']['url'])
 
-        await context.channel.send(embed=msg)
+        await context.channel.send(f'https://www.youtube.com/watch?v={videoId}')
 
     @commands.command(aliases=['c', 'calc'])
     async def valuta(self, context, *query: str):
