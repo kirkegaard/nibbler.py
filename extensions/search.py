@@ -32,7 +32,7 @@ class Search():
         f = query[1].upper()
         t = query[3].upper()
 
-        endpoint = "https://api.fixer.io/latest?symbols={},{}".format(f, t)
+        endpoint = "http://api.fixer.io/latest?base={}".format(f)
         res = requests.get(endpoint).json()
 
         await context.send('Result: {} {}'.format(v * res['rates'][t], t))
