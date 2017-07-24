@@ -14,13 +14,15 @@ class Search():
     @commands.command(aliases=['g'])
     async def google(self, context, *query: str):
         """Searches google and returns the first result"""
-        result = google.lucky(' '.join(query))
-        await context.channel.send(result)
+        result = google.search(' '.join(query), num=1,
+                               user_agent=google.get_random_user_agent())
+        await context.channel.send(next(result))
 
     @commands.command(aliases=['yt', 'v'])
     async def video(self, context, *query: str):
         """Searches google video (youtube) and returns the first result"""
-        result = google.search_videos(' '.join(query), num=1)
+        result = google.search(
+            ' '.join(query), num=1, user_agent=google.get_random_user_agent(), tpe='vid')
         await context.channel.send(next(result))
 
     @commands.command(aliases=['c', 'calc'])
