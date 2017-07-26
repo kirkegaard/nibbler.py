@@ -1,0 +1,22 @@
+{
+    "prefix": ["!"],
+    "description": "Hello! Do you remember some months ago when the Earth was under attack by flying brains?",
+    "debug": false,
+    "extensions": [
+        "rng",
+        "timer",
+        "member",
+        "laura",
+        "brain",
+        "utils",
+        "reddit",
+        "search",
+        "guess",
+        "hva"
+    ],
+    "token": "YOUR DISCORD TOKEN",
+    "google_cx": "GOOGLE CX TOKEN",
+    "google_token": "GOOGLE TOKEN",
+    "spotify_id": "SPOTIFY APP ID",
+    "spotify_secret": "SPOTIFY APP SECRET"
+}
