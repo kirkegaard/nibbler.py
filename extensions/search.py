@@ -38,6 +38,7 @@ class Search():
 
     @commands.command(aliases=['s'])
     async def spotify(self, context, *query: str):
+        """Searches spotify for a track"""
         credentials = oauth2.SpotifyClientCredentials(
             client_id=self.settings['spotify']['client_id'],
             client_secret=self.settings['spotify']['client_secret'])
