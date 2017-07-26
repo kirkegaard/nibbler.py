@@ -2,11 +2,12 @@ import re
 import discord
 import requests
 import json
+import spotipy
+import spotipy.oauth2 as oauth2
 
 from utils import config
 from discord.ext import commands
 from imdbpie import Imdb
-
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
@@ -17,21 +18,43 @@ class Search():
     def __init__(self, bot):
         self.bot = bot
         self.config = config.Config('config/bot.json')
-        self.endpoint = {
-            'google': 'https://www.googleapis.com/customsearch/v1',
-            'imdb': 'https://www.imdb.com/title/{}'
+        self.settings = {
+            'google': {
+                'endpoint': 'https://www.googleapis.com/customsearch/v1',
+                'cx': self.config.get('google_cx'),
+                'key': self.config.get('google_token')
+            },
+            'spotify': {
+                'client_id': self.config.get('spotify_id'),
+                'client_secret': self.config.get('spotify_secret')
+            },
+            'imdb': {
+                'endpoint': 'https://www.imdb.com/title/{}'
+            },
+            'fixer': {
+                'endpoint': "http://api.fixer.io/latest?base={}"
+            }
         }
-        self.params_google = {
-            'key': self.config.get('google_token'),
-            'cx': self.config.get('google_cx')
-        }
+
+    @commands.command(aliases=['s'])
+    async def spotify(self, context, *query: str):
+        credentials = oauth2.SpotifyClientCredentials(
+            client_id=self.settings['spotify']['client_id'],
+            client_secret=self.settings['spotify']['client_secret'])
+
+        token = credentials.get_access_token()
+        sp = spotipy.Spotify(auth=token)
+        res = sp.search(' '.join(query), limit=1)
+        href = res['tracks']['items'][0]['external_urls']['spotify']
+
+        await context.channel.send(href)
 
     @commands.command(aliases=['g'])
     async def google(self, context, *query: str):
         """Searches google and returns the first result"""
-        self.params_google['q'] = ' '.join(query)
+        self.settings['google']['q'] = ' '.join(query)
         res = requests.get(
-            self.endpoint['google'], params=self.params_google).json()
+            self.settings['google']['endpoint'], params=self.settings['google']).json()
         res = res['items'][0]
 
         msg = discord.Embed(
@@ -47,21 +70,12 @@ class Search():
     async def video(self, context, *query: str):
         """Searches google video (youtube) and returns the first result"""
         youtube = build('youtube', 'v3',
-                        developerKey=self.params_google['key'])
+                        developerKey=self.settings['google']['key'])
         query = youtube.search().list(q=' '.join(
             query), part="id, snippet", maxResults=1).execute()
         res = query.get('items', [])
 
         videoId = res[0]['id']['videoId']
-        # res = res[0]['snippet']
-
-        # msg = discord.Embed(
-        #     colour=0xDF080E,
-        #     title=res['title'],
-        #     description=res['description'],
-        #     url='https://www.youtube.com/watch?v={}'.format(videoId)
-        # )
-        # msg.set_image(url=res['thumbnails']['high']['url'])
 
         await context.channel.send(f'https://www.youtube.com/watch?v={videoId}')
 
@@ -72,7 +86,7 @@ class Search():
         f = query[1].upper()
         t = query[3].upper()
 
-        endpoint = "http://api.fixer.io/latest?base={}".format(f)
+        endpoint = self.settings['fixer']['endpoint'].format(f)
         res = requests.get(endpoint).json()
 
         await context.send('Result: {} {}'.format(v * res['rates'][t], t))
@@ -89,7 +103,7 @@ class Search():
             title='{} ({})'.format(res.title, res.year),
             description='Rating: {}\nGenres: {}\nPlot: {}'.format(
                 res.rating, ', '.join(res.genres), res.plot_outline),
-            url=self.endpoint['imdb'].format(res.imdb_id)
+            url=self.settings['imdb']['endpoint'].format(res.imdb_id)
         )
         msg.set_image(url=res.poster_url)
 

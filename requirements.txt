@@ -3,3 +3,4 @@ git+https://github.com/chauffer/cobe@master
 google-api-python-client
 requests
 imdbpie
+spotipy
