@@ -1,10 +1,9 @@
-import discord
 import datetime
 import logging
+
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
-client = discord.Client()
 
 
 class Utils():
@@ -20,6 +19,7 @@ class Utils():
         await msg.edit(content='Pong!!! ({}ms)'.format(lag.microseconds / 100))
 
     @commands.command(name='reload')
+    @commands.is_owner()
     async def _reload(self, context, extension_name: str):
         """Reload an extension"""
         try:
@@ -32,6 +32,7 @@ class Utils():
             await context.send('\N{OK HAND SIGN}')
 
     @commands.command()
+    @commands.is_owner()
     async def load(self, context, extension_name: str):
         """Loads an extension"""
         try:
@@ -42,12 +43,14 @@ class Utils():
         await context.send("{} loaded.".format(extension_name))
 
     @commands.command()
+    @commands.is_owner()
     async def unload(self, context, extension_name: str):
         """Unloads an extension"""
         self.bot.unload_extension('extensions.' + extension_name)
         await context.send("{} unloaded.".format(extension_name))
 
     @commands.command()
+    @commands.is_owner()
     async def purge(self, context):
         """Clean up the channel history"""
         await context.message.delete()

@@ -1,9 +1,9 @@
 import discord
-from discord.ext import commands
 import logging
 
+from discord.ext import commands
+
 log = logging.getLogger(__name__)
-client = discord.Client()
 
 
 class Member():

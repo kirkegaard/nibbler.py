@@ -1,7 +1,8 @@
-from discord.ext import commands
-from cobe.brain import Brain
 import re
 import discord
+
+from discord.ext import commands
+from cobe.brain import Brain
 
 brain = Brain("tmp/nibbler.brain")
 # the channels we want the bot to learn from
