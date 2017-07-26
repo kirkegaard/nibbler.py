@@ -68,11 +68,11 @@ class Search():
         await context.channel.send(embed=msg)
 
     @commands.command(aliases=['yt', 'v'])
-    async def video(self, context, *query: str):
-        """Searches google video (youtube) and returns the first result"""
-        youtube = build('youtube', 'v3',
-                        developerKey=self.settings['google']['key'])
-        query = youtube.search().list(q=' '.join(
+    async def youtube(self, context, *query: str):
+        """Searches youtube and returns the first result"""
+        yt = build('youtube', 'v3',
+                   developerKey=self.settings['google']['key'])
+        query = yt.search().list(q=' '.join(
             query), part="id, snippet", maxResults=1).execute()
         res = query.get('items', [])
 
