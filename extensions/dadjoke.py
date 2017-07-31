@@ -1,5 +1,4 @@
 import requests
-import pprint
 from discord.ext import commands
 
 
