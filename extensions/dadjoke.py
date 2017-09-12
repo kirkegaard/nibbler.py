@@ -1,4 +1,5 @@
 import requests
+import requests_cache
 from discord.ext import commands
 
 
@@ -11,7 +12,8 @@ class Dadjoke():
     async def dadjoke(self, context):
         """Tells a dad joke"""
         headers = {"Accept": "text/plain"}
-        res = requests.get('https://icanhazdadjoke.com', headers=headers)
+        with requests_cache.disabled():
+            res = requests.get('https://icanhazdadjoke.com', headers=headers)
         await context.send(res.text)
 
 
