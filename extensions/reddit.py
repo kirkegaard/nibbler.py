@@ -31,17 +31,27 @@ class Reddit():
         self.bot = bot
 
     @commands.command()
-    async def porn(self, context):
+    async def porn(self, context, count=1):
         """Fetches a random picture from subreddits. *NSFW channels only"""
         if not context.message.channel.is_nsfw():
             await context.send("This isnt a nsfw channel")
             return
 
-        endpoint = 'http://reddit.com/r/{}/random/.json'.format(
-            random.choice(SUBREDDITS_PORN))
-        data = requests.get(endpoint, headers=headers).json()
-        msg = data[0]["data"]["children"][0]["data"]["url"]
-        await context.send(msg)
+        if count > 10:
+            await context.send("I can only fetch 10 images. Sorry :(")
+            return
+
+        res = []
+        for x in range(1, count):
+            endpoint = 'http://reddit.com/r/{}/random/.json'.format(
+                random.choice(SUBREDDITS_PORN))
+            data = requests.get(endpoint, headers=headers).json()
+            link = data[0]["data"]["children"][0]["data"]["url"]
+            if not link in res:
+                res.append(link)
+
+        for y in res:
+            await context.send(y)
 
 
 def setup(bot):
