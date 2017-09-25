@@ -1,6 +1,7 @@
 import logging
 import random
 import requests
+import requests_cache
 import json
 
 from discord.ext import commands
@@ -45,10 +46,12 @@ class Reddit():
         for x in range(1, count):
             endpoint = 'http://reddit.com/r/{}/random/.json'.format(
                 random.choice(SUBREDDITS_PORN))
-            data = requests.get(endpoint, headers=headers).json()
-            link = data[0]["data"]["children"][0]["data"]["url"]
-            if not link in res:
-                res.append(link)
+
+            with requests_cache.disabled():
+                data = requests.get(endpoint, headers=headers).json()
+                link = data[0]["data"]["children"][0]["data"]["url"]
+                if not link in res:
+                    res.append(link)
 
         for y in res:
             await context.send(y)
