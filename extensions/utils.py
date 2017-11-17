@@ -51,6 +51,14 @@ class Utils():
 
     @commands.command()
     @commands.is_owner()
+    async def purgeall(self, context):
+        """Clean up the channel history"""
+        await context.message.delete()
+        async for msg in context.message.channel.history(limit=10000000000000):
+            await msg.delete()
+
+    @commands.command()
+    @commands.is_owner()
     async def purge(self, context):
         """Clean up the channel history"""
         await context.message.delete()
