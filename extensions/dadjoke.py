@@ -16,6 +16,10 @@ class Dadjoke():
             res = requests.get('https://icanhazdadjoke.com', headers=headers)
         await context.send(res.text)
 
+    async def on_message(self, message):
+        if message.content.lower().startswith('jeg er'):
+            msg = message.content.lower().replace('jeg er', 'Hej, ')
+            await message.channel.send('%s. Jeg er far.' % msg)
 
 def setup(bot):
     bot.add_cog(Dadjoke(bot))
