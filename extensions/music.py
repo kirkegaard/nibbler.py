@@ -3,10 +3,6 @@ import functools
 import discord
 import discord.ext.commands as commands
 import youtube_dl
-from utils import config
-
-config = config.Config('config/bot.json')
-ROLES = config.get('roles')
 
 
 class MusicError(commands.CommandError):
@@ -183,7 +179,7 @@ class Music:
             ctx.music_state.voice_client.resume()
 
     @commands.command()
-    @commands.has_any_role(*ROLES['admin'])
+    @commands.has_permissions(manage_guild=True)
     async def stop(self, ctx):
         """Stops the player, clears the playlist and leaves the voice channel."""
         await ctx.music_state.stop()
@@ -196,7 +192,7 @@ class Music:
         ctx.music_state.volume = volume / 100
 
     @commands.command()
-    @commands.has_any_role(*ROLES['admin'])
+    @commands.has_permissions(manage_guild=True)
     async def clear(self, ctx):
         """Clears the playlist."""
         ctx.music_state.clear()
@@ -218,7 +214,7 @@ class Music:
             await ctx.music_state.play_next_song()
 
     @commands.command()
-    @commands.has_any_role(*ROLES['admin'])
+    @commands.has_permissions(manage_guild=True)
     async def next(self, ctx):
         """Plays the next song from the playlist"""
         if ctx.music_state.is_playing():
@@ -226,8 +222,7 @@ class Music:
             await ctx.music_state.play_next_song()
 
     @commands.command()
-    # @commands.has_permissions(manage_guild=True)
-    @commands.has_any_role(*ROLES['admin'])
+    @commands.has_permissions(manage_guild=True)
     async def minskips(self, ctx, number: int):
         """Sets the minimum number of votes to skip a song."""
         ctx.music_state.min_skips = number
