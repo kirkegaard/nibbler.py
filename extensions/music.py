@@ -3,6 +3,10 @@ import functools
 import discord
 import discord.ext.commands as commands
 import youtube_dl
+from utils import config
+
+config = config.Config('config/bot.json')
+ROLES = config.get('roles')
 
 
 class MusicError(commands.CommandError):
