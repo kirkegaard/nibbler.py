@@ -218,6 +218,7 @@ class Music:
     async def next(self, ctx):
         """Plays the next song from the playlist"""
         if ctx.music_state.is_playing():
+            ctx.music_state.skips.clear()
             ctx.music_state.voice_client.stop()
             await ctx.music_state.play_next_song()
 
