@@ -16,7 +16,7 @@ class Laura():
         rand = randint(0, 1000)
         msg = None
 
-        if ctx.author.id in laura_id and rand > 800:
+        if ctx.author.id in laura_id and rand > 900:
             await ctx.add_reaction('\U0001F4A9')
 
 
