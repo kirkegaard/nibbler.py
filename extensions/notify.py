@@ -22,18 +22,19 @@ class Notify():
 
         for n in notifications:
             await context.author.send("[notification]: {} ({}) wrote: {}".format(
-                n['member'], n['date'], n['msg']))
+                n['author'], n['date'], n['msg']))
 
         await self.db.put(context.author.mention, [])
 
     @commands.command()
     async def notify(self, context, member, *msg: str):
         """Adds a notification for the next time the user is online"""
-        if member is self.bot.user.mention:
-            return
+        # if member is self.bot.user.mention:
+        #     return
 
         data = {
             "member": member,
+            "author": context.author.mention,
             "msg": ' '.join(msg),
             "date": datetime.now().strftime('%d. %b %H:%M')
         }
