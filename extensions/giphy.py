@@ -17,7 +17,7 @@ class Giphy():
         endpoint = '/v1/gifs/random'
         params = {
             'api_key': self.apikey,
-            'tag': query
+            'tag': ' '.join(query)
         }
 
         with requests_cache.disabled():
