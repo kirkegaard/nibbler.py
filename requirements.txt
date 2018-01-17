@@ -6,3 +6,4 @@ imdbpie
 spotipy
 tvtid
 youtube_dl
+sanic

@@ -9,8 +9,9 @@ import traceback
 from discord.ext import commands
 from utils import config
 
-log = logging.getLogger(__name__)
+from sanic import Sanic
 
+log = logging.getLogger(__name__)
 
 class Nibbler(commands.AutoShardedBot):
     """Nibbler"""
@@ -19,10 +20,14 @@ class Nibbler(commands.AutoShardedBot):
         self.config = config.Config('config/bot.json')
         self.token = self.config['token']
         self.prefix = self.config['prefix']
+        self.socket = self.config['socket']
         self.description = self.config['description']
 
         super().__init__(command_prefix=self.prefix, description=self.description,
                          pm_help=None, help_attrs=dict(hidden=True))
+
+        if self.socket['enabled']:
+            self.api = Sanic()
 
         for extension in self.config['extensions']:
             try:
@@ -50,6 +55,9 @@ class Nibbler(commands.AutoShardedBot):
 
         print(f'Ready: {self.user} (ID: {self.user.id})')
 
+        if self.socket['enabled']:
+            await self.api.create_server(host=self.socket['host'], port=self.socket['port'])
+
     async def on_resumed(self):
         print('Resumed...')
 
@@ -57,5 +65,6 @@ class Nibbler(commands.AutoShardedBot):
         if message.author.bot:
             return
         await self.process_commands(message)
+
 
 nibbler = Nibbler()
