@@ -1,3 +1,4 @@
+tvtid_cache.sqlite
 config/*.json
 tmp/*
 
