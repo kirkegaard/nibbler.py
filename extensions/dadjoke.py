@@ -17,12 +17,12 @@ class Dadjoke():
             res = requests.get('https://icanhazdadjoke.com', headers=headers)
         await context.send(res.text)
 
-    async def on_message(self, message):
-        if message.content.lower().startswith('jeg er'):
-            rand = randint(0, 1000)
-            if rand == 69:
-                msg = message.content.lower().replace('jeg er', 'Hej, ')
-                await message.channel.send('%s. Jeg er far.' % msg)
+    #async def on_message(self, message):
+        #if message.content.lower().startswith('jeg er'):
+            #rand = randint(0, 100)
+            #if rand == 42:
+                #msg = message.content.lower().replace('jeg er', 'Hej, ')
+                #await message.channel.send('%s. Jeg er far.' % msg)
 
 
 def setup(bot):

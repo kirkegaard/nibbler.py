@@ -26,6 +26,8 @@ class LastFM():
                     artist = track['artist']['#text']
                     title = track['name']
                     await message.channel.send('♫ Vi hører sgu da: **{} - {}**'.format(artist, title))
+            else:
+                await message.channel.send('Aner det ikke!')
 
 
 def setup(bot):

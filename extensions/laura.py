@@ -1,3 +1,4 @@
+import discord
 from random import randint
 from discord.ext import commands
 
@@ -16,8 +17,9 @@ class Laura():
         rand = randint(0, 1000)
         msg = None
 
-        if ctx.author.id in laura_id and rand > 850:
-            await ctx.add_reaction('\U0001F4A9')
+        if ctx.author.id in laura_id and rand > 700:
+            await ctx.add_reaction('❤')
+            #await ctx.add_reaction('\U0001F4A9')
 
 
 def setup(bot):
