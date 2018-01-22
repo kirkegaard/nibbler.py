@@ -8,7 +8,8 @@ users = {
     163512506269171712 : 'ranza',
     131908822301278208 : 'kawasum1',
     263970974532108288 : 'camillemav',
-    249964076132859905 : 'kpthedane1'
+    249964076132859905 : 'kpthedane1',
+    244747185088888832, 'teh_utyske'
 }
 
 class LastFM():
@@ -26,6 +27,8 @@ class LastFM():
                     artist = track['artist']['#text']
                     title = track['name']
                     await message.channel.send('♫ Vi hører sgu da: **{} - {}**'.format(artist, title))
+            else:
+                await message.channel.send('Aner det ikke!')
 
 
 def setup(bot):
