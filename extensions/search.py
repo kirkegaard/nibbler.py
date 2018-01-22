@@ -95,18 +95,27 @@ class Search():
     @commands.command()
     async def imdb(self, context, *query: str):
         """Searches imdb for a movie title"""
-        imdb = Imdb(anonymize=True)
-        search = imdb.search_for_title(query)
-        res = imdb.get_title_by_id(search[0]['imdb_id'])
+        imdb = Imdb()
+        search = imdb.search_for_title(' '.join(query))
+        imdb_id = search[0]['imdb_id']
+        res = imdb.get_title(imdb_id)
+        genres = imdb.get_title_genres(imdb_id)
+
+        title = res['base']['title']
+        year = res['base']['year']
+        rating = res['ratings']['rating']
+        plot_outline = res['plot']['outline']['text']
+        poster_url = res['base']['image']['url']
+
 
         msg = discord.Embed(
             colour=0xffff00,
-            title='{} ({})'.format(res.title, res.year),
+            title='{} ({})'.format(title, year),
             description='Rating: {}\nGenres: {}\nPlot: {}'.format(
-                res.rating, ', '.join(res.genres), res.plot_outline),
-            url=self.settings['imdb']['endpoint'].format(res.imdb_id)
+                rating, ', '.join(genres['genres']), plot_outline),
+            url=self.settings['imdb']['endpoint'].format(imdb_id)
         )
-        msg.set_image(url=res.poster_url)
+        msg.set_image(url=poster_url)
 
         await context.channel.send(embed=msg)
 
