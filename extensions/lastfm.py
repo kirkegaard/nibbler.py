@@ -9,7 +9,7 @@ users = {
     131908822301278208 : 'kawasum1',
     263970974532108288 : 'camillemav',
     249964076132859905 : 'kpthedane1',
-    244747185088888832, 'teh_utyske'
+    244747185088888832 : 'teh_utyske'
 }
 
 class LastFM():
