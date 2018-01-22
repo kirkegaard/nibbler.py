@@ -11,9 +11,13 @@ class Say():
 
     async def sg(self, request):
         res = request.json
-        channel = self.bot.get_channel(id=res['channel_id'])
-        await channel.send(res['msg'])
-        return json({"success": 1})
+        if request.headers['Authorization'] == 'token hadergeorgehale':
+            channel = self.bot.get_channel(res['channel'])
+            await channel.send('[SG] New album from {} [{}] {}'.format(
+                res['model'], res['album'], res['url'],
+            ))
+            return json({"success": 1}, status=200)
+        return json({"success": 0}, status=404)
 
 def setup(bot):
     say = Say(bot)
