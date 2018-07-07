@@ -6,4 +6,5 @@ imdbpie
 spotipy
 tvtid
 youtube_dl
+urbandictionary
 sanic
