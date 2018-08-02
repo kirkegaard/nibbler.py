@@ -16,8 +16,6 @@ class UrbanDict():
         word = ' '.join(word)
         res = requests.get(self.endpoint % word)
         definition = res.json()['list'][0]
-        print(definition)
-
         await context.channel.send('**{}**: {}\n**Example**: {}'.format(definition['word'], definition['definition'], definition['example']))
 
 
