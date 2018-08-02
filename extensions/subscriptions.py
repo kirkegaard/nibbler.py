@@ -12,6 +12,7 @@ class Subscriptions():
         self.conn.row_factory = sqlite3.Row
 
     @commands.command(aliases=['sub'])
+    @commands.has_any_role(*ROLES['admin'])
     async def subscribe(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
@@ -23,6 +24,7 @@ class Subscriptions():
         await context.send('Subreddit removed from channel')
 
     @commands.command(aliases=['unsub'])
+    @commands.has_any_role(*ROLES['admin'])
     async def unsubscribe(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
