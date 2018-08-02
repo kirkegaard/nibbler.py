@@ -2,8 +2,8 @@ import sqlite3
 from discord.ext import commands
 from utils import config
 
-config = config.Config('config/bot.json')
-ROLES = config.get('roles')
+conf = config.Config('config/bot.json')
+ROLES = conf.get('roles')
 
 
 class Subscriptions():
