@@ -24,7 +24,7 @@ class Subscriptions():
         res = cur.execute('INSERT INTO subscriptions VALUES (0,?,?)', [channel, subreddit])
         self.conn.commit()
 
-        await context.send('Subreddit removed from channel')
+        await context.send('Subreddit added to channel')
 
     @commands.command(aliases=['unsub'])
     @commands.has_any_role(*ROLES['admin'])
