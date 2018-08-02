@@ -8,3 +8,4 @@ tvtid
 youtube_dl
 urbandictionary
 sanic
+praw

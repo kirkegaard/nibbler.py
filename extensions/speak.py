@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from utils import config
 
 from sanic.response import json
 from sanic.response import text
@@ -9,10 +10,11 @@ class Speak():
 
     def __init__(self, bot):
         self.bot = bot
+        self.config = config.Config('config/bot.json')
 
     async def say(self, request):
         res = request.json
-        if request.headers['Authorization'] == 'trololol':
+        if request.headers['Authorization'] == self.config.get('bot_auth'):
             channel = self.bot.get_channel(res['channel'])
             await channel.send(res['msg'])
             return json({"success": 1}, status=200)
@@ -20,7 +22,7 @@ class Speak():
 
     async def sg(self, request):
         res = request.json
-        if request.headers['Authorization'] == 'token hadergeorgehale':
+        if request.headers['Authorization'] == self.config.get('bot_auth'):
             channel = self.bot.get_channel(res['channel'])
             await channel.send('[SG] New album from {} [{}] {}'.format(
                 res['model'], res['album'], res['url'],
