@@ -15,8 +15,11 @@ class UrbanDict():
     async def urbandict(self, context, *word: str):
         word = ' '.join(word)
         res = requests.get(self.endpoint % word)
-        definition = res.json()['list'][0]
-        await context.channel.send('**{}**: {}\n**Example**: {}'.format(definition['word'], definition['definition'], definition['example']))
+        if res.json()['list']:
+            definition = res.json()['list'][0]
+            await context.channel.send('**{}**: {}\n**Example**: {}'.format(definition['word'], definition['definition'], definition['example']))
+        else:
+            await context.channel.send('Couldnt find anything on **%s**' % word)
 
 
 def setup(bot):
