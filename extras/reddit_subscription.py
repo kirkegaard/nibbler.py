@@ -55,8 +55,8 @@ class Subscriptions():
                         self.__save_link(subscription.channel, submission.url)
                         self.__update_sid(sid, subscription.subreddit)
                         self.__post(subscription, submission)
-            except:
-                print('Error fetching feed')
+            except Exception as e:
+                print('Error {e}')
 
     def __link_exists(self, channel, link):
         c = self.conn.cursor()
