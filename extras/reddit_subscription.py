@@ -47,12 +47,16 @@ class Subscriptions():
     def check_subscriptions(self):
         for subscription in self.subscriptions:
             print('Checking: {}'.format(subscription.subreddit))
-            for submission in self.reddit.subreddit(subscription.subreddit).hot():
-                sid = int(submission.id, 36)
-                if sid > subscription.sid and not self.__link_exists(subscription.channel, submission.url):
-                    self.__save_link(subscription.channel, submission.url)
-                    self.__update_sid(sid, subscription.subreddit)
-                    self.__post(subscription, submission)
+            try:
+                submissions = self.reddit.subreddit(subscription.subreddit).hot()
+                for submission in submissions:
+                    sid = int(submission.id, 36)
+                    if sid > subscription.sid and not self.__link_exists(subscription.channel, submission.url):
+                        self.__save_link(subscription.channel, submission.url)
+                        self.__update_sid(sid, subscription.subreddit)
+                        self.__post(subscription, submission)
+            except:
+                print('Error fetching feed')
 
     def __link_exists(self, channel, link):
         c = self.conn.cursor()
