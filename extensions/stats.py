@@ -35,22 +35,31 @@ class Stats():
                         [date, gid, cid, uid, user])
         self.conn.commit()
 
-    @commands.command(aliases=['sts'])
-    async def stats(self, context, channel=None):
-        if not channel:
-            channel = context.channel.id
+    @commands.group()
+    async def stats(self, context):
+        if context.invoked_subcommand is not None:
+            return
 
-        gid = context.guild.id
         cid = context.channel.id
+        gid = context.guild.id
 
         cur = self.conn.cursor()
         cur.execute('SELECT * FROM users WHERE gid = ? AND cid = ? ORDER BY count DESC', [gid, cid])
+        await self.say(context, cur.fetchall())
 
+    @stats.command()
+    async def guild(self, context):
+        gid = context.guild.id
+
+        cur = self.conn.cursor()
+        cur.execute('SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username', [gid])
+        await self.say(context, cur.fetchall())
+
+    async def say(self, context, rows):
         output = []
-        for idx, row in enumerate(cur.fetchall()):
+        for idx, row in enumerate(rows):
             c = idx + 1
             output.append('{}. {}: {}'.format(c, row['username'], row['count']))
-
         await context.send('```\n%s```' % '\n'.join(output))
 
 
