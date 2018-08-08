@@ -44,7 +44,7 @@ class Stats():
         gid = context.guild.id
 
         cur = self.conn.cursor()
-        cur.execute('SELECT * FROM users WHERE gid = ? AND cid = ? ORDER BY count DESC', [gid, cid])
+        cur.execute('SELECT * FROM users WHERE gid = ? AND cid = ? ORDER BY count DESC LIMIT 10', [gid, cid])
         await self.say(context, cur.fetchall())
 
     @stats.command()
@@ -53,7 +53,7 @@ class Stats():
             gid = context.guild.id
 
         cur = self.conn.cursor()
-        cur.execute('SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username ORDER BY count DESC', [gid])
+        cur.execute('SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username ORDER BY count DESC LIMIT 10', [gid])
         await self.say(context, cur.fetchall())
 
     async def say(self, context, rows):
