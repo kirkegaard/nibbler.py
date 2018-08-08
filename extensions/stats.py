@@ -48,8 +48,9 @@ class Stats():
         await self.say(context, cur.fetchall())
 
     @stats.command()
-    async def guild(self, context):
-        gid = context.guild.id
+    async def guild(self, context, gid=None):
+        if not gid:
+            gid = context.guild.id
 
         cur = self.conn.cursor()
         cur.execute('SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username', [gid])
