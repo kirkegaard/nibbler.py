@@ -53,7 +53,7 @@ class Stats():
             gid = context.guild.id
 
         cur = self.conn.cursor()
-        cur.execute('SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username', [gid])
+        cur.execute('SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username ORDER BY count DESC', [gid])
         await self.say(context, cur.fetchall())
 
     async def say(self, context, rows):
