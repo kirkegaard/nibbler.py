@@ -12,19 +12,22 @@ class Mention():
     @commands.group()
     async def mention(self, context):
         if context.invoked_subcommand is None:
-            await context.send('Use !mention add [word] to add a word. Or use !mention delete [word] to remove a word')
+            await context.send('Use `!mention add [word]` to add a word. Or use `!mention del [word]` to delete a word.')
 
     @mention.command()
     async def list(self, context):
+        """Lists all the words im notifying you on."""
         mentions = self.db.get(context.author.id) or None
         if mentions is None:
             await context.send('Dont have any mentions on you')
+            return
 
         await context.send('Ive got: **"{}"** on you'.format(', '.join(mentions)))
 
 
     @mention.command()
     async def add(self, context, *word: str):
+        """Adds a new word to your list."""
         mentions = self.db.get(context.author.id) or []
 
         word = ' '.join(word).lower()
@@ -38,9 +41,20 @@ class Mention():
         await self.db.put(context.author.id, mentions)
         await context.send('Added {} to {}'.format(word, context.author.mention));
 
-    @mention.command()
+    @mention.command(aliases=['del'])
     async def delete(self, context, *word: str):
-        pass
+        """Deletes a word from your list."""
+        mentions = self.db.get(context.author.id) or None
+        if mentions is None:
+            await context.send('Dont have any mentions on you')
+            return
+
+        word = ' '.join(word).lower()
+
+        mentions.remove(word)
+
+        await self.db.put(context.author.id, mentions)
+        await context.send('Removed {} from {}'.format(word, context.author.mention));
 
 
     async def on_message(self, context):
