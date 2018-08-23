@@ -11,6 +11,8 @@ class Mention():
 
     @commands.group()
     async def mention(self, context):
+        """Mention sends you notifications when a word appear in a message.
+        It will only notify you if your status is set to offline!"""
         if context.invoked_subcommand is None:
             await context.send('Use `!mention add [word]` to add a word. Or use `!mention del [word]` to delete a word.')
 
