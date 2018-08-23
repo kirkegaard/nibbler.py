@@ -61,18 +61,19 @@ class Mention():
 
     async def on_message(self, context):
         is_private = isinstance(context.channel, discord.abc.PrivateChannel)
-        if is_private or context.author.mention == self.bot.user.mention:
+        if is_private or context.author.mention == self.bot.user.mention or context.content.startswith('!mention'):
             return
 
         all = self.db.all()
         for user in self.db.all():
             for word in all[user]:
-                u = await self.bot.get_user_info(user)
                 if word in context.content.lower():
                     if int(user) == context.author.id:
                         break
+
                     res = context.guild.get_member(int(user))
                     if res and str(res.status) == 'offline':
+                        print('[Mention] Sending notification')
                         await res.send('{} mentioned you: {}'.format(context.author.mention, context.content))
                         break
 
