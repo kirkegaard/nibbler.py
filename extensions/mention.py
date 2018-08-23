@@ -27,7 +27,7 @@ class Mention():
     async def add(self, context, *word: str):
         mentions = self.db.get(context.author.id) or []
 
-        word = ' '.join(word)
+        word = ' '.join(word).lower()
 
         if word in mentions:
             await context.send('Already got that word');
@@ -50,11 +50,15 @@ class Mention():
 
         all = self.db.all()
         for user in self.db.all():
-            if any(word in context.content for word in all[user]):
+            for word in all[user]:
                 u = await self.bot.get_user_info(user)
-                if u:
-                    await u.send('{} mentioned you: {}'.format(context.author.mention, context.content))
-                    return
+                if word in context.content.lower():
+                    if int(user) == context.author.id:
+                        break
+                    res = context.guild.get_member(int(user))
+                    if res and str(res.status) == 'offline':
+                        await res.send('{} mentioned you: {}'.format(context.author.mention, context.content))
+                        break
 
 def setup(bot):
     bot.add_cog(Mention(bot))
