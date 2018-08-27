@@ -48,12 +48,13 @@ class Stats():
         await self.say(context, cur.fetchall())
 
     @stats.command()
-    async def guild(self, context, gid=None):
+    async def guild(self, context, gid=None, limit=10):
         if not gid:
             gid = context.guild.id
 
         cur = self.conn.cursor()
-        cur.execute('SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username ORDER BY count DESC LIMIT 10', [gid])
+        cur.execute(
+            'SELECT username, sum(count) as count FROM users WHERE gid=? GROUP BY username ORDER BY count DESC LIMIT ?', [gid, limit])
         await self.say(context, cur.fetchall())
 
     async def say(self, context, rows):
