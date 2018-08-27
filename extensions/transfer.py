@@ -1,5 +1,3 @@
-import re
-import requests
 import discord
 from discord.ext import commands
 
@@ -14,7 +12,8 @@ class Transfer():
     async def transfer(self, context, channel: int):
         channel = self.bot.get_channel(channel)
 
-        async for msg in channel.history(limit=100000000000000, reverse=True):
+        messages = await channel.history(limit=10000000000).flatten()
+        for msg in reversed(messages):
             date = msg.created_at.strftime("%Y-%m-%d %H:%M")
             try:
                 author = msg.author.mention
