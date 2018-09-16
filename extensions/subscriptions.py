@@ -21,7 +21,7 @@ class Subscriptions():
 
     @subscriptions.command(aliases=['add', 'sub'])
     @commands.has_any_role(*ROLES['admin'])
-    async def add(self, context, subreddit, channel=None):
+    async def subscriptions_add(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
 
@@ -33,7 +33,7 @@ class Subscriptions():
 
     @subscriptions.command(aliases=['del', 'unsub'])
     @commands.has_any_role(*ROLES['admin'])
-    async def delete(self, context, subreddit, channel=None):
+    async def subscriptions_delete(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
 
@@ -44,7 +44,7 @@ class Subscriptions():
         await context.send('Subreddit removed from channel')
 
     @subscriptions.command(aliases=['list', 'subs'])
-    async def list(self, context, channel=None):
+    async def subscriptions_list(self, context, channel=None):
         if not channel:
             channel = context.channel.id
 
