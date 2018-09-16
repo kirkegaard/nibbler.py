@@ -14,9 +14,14 @@ class Subscriptions():
         self.conn = sqlite3.connect(self.config.get('subscription_db'))
         self.conn.row_factory = sqlite3.Row
 
-    @commands.command(aliases=['sub'])
-    @commands.has_any_role(*ROLES['admin'])
-    async def subscribe(self, context, subreddit, channel=None):
+    @commands.group()
+    async def subscriptions(self, context):
+        if context.invoked_subcommand is None:
+            await context.send('Use `!subscriptions add [subreddit]` or `!subscriptions del [subreddit]`')
+
+    @subscriptions.command(aliases=['add', 'sub'])
+    @subscriptions.has_any_role(*ROLES['admin'])
+    async def add(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
 
@@ -26,9 +31,9 @@ class Subscriptions():
 
         await context.send('Subreddit added to channel')
 
-    @commands.command(aliases=['unsub'])
-    @commands.has_any_role(*ROLES['admin'])
-    async def unsubscribe(self, context, subreddit, channel=None):
+    @subscriptions.command(aliases=['del', 'unsub'])
+    @subscriptions.has_any_role(*ROLES['admin'])
+    async def delete(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
 
@@ -38,8 +43,8 @@ class Subscriptions():
 
         await context.send('Subreddit removed from channel')
 
-    @commands.command(aliases=['subs'])
-    async def subscriptions(self, context, channel=None):
+    @subscriptions.command(aliases=['list', 'subs'])
+    async def list(self, context, channel=None):
         if not channel:
             channel = context.channel.id
 
