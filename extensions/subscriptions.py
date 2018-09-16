@@ -20,7 +20,7 @@ class Subscriptions():
             await context.send('Use `!subscriptions add [subreddit]` or `!subscriptions del [subreddit]`')
 
     @subscriptions.command(aliases=['add', 'sub'])
-    @subscriptions.has_any_role(*ROLES['admin'])
+    @commands.has_any_role(*ROLES['admin'])
     async def add(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
@@ -32,7 +32,7 @@ class Subscriptions():
         await context.send('Subreddit added to channel')
 
     @subscriptions.command(aliases=['del', 'unsub'])
-    @subscriptions.has_any_role(*ROLES['admin'])
+    @commands.has_any_role(*ROLES['admin'])
     async def delete(self, context, subreddit, channel=None):
         if not channel:
             channel = context.channel.id
