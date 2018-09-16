@@ -12,12 +12,17 @@ class Twitch():
         self.bot = bot
         self.config = config.Config('config/bot.json')
 
-    @commands.command()
+    @commands.group()
+    async def twitch(self, context):
+        if context.invoked_subcommand is None:
+            await context.send('Use `!twitch sub [user]` to subscribe to user. Or use `!twitch unsub [user]` to remove user.')
+
+    @twitch.command()
     async def subscribe(self, context):
         # https://api.twitch.tv/helix/webhooks/hub?hub.mode=subscribe&hub.topic=https://api.twitch.tv/helix/streams?user_id={user_id}
         pass
 
-    @commands.command()
+    @twitch.command()
     async def unsubscribe(self, context):
         pass
 
