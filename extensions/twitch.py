@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
 from utils import config
-from sanic.response import json
-from sanic.response import text
+
 import requests
+from sanic import response
 
 
 class Twitch():
@@ -11,53 +11,63 @@ class Twitch():
     def __init__(self, bot):
         self.bot = bot
         self.config = config.Config('config/bot.json')
-        self.callback = '{}/callback'.format(self.config.get('bot_host'))
         self.headers = {"Client-ID": self.config.get('twitch_id')}
+        self.api = 'https://api.twitch.tv/helix'
 
     @commands.group()
     async def twitch(self, context):
         if context.invoked_subcommand is None:
             await context.send('Use `!twitch sub [user]` to subscribe to user. Or use `!twitch unsub [user]` to remove user.')
 
+    @twitch.command()
+    async def online(self, context, username):
+        endpoint = '%s/streams' % self.api
+        payload = {'user_login': username}
+        res = requests.get(endpoint, params=payload, headers=self.headers).json()
+        if not res['data']:
+            return await context.send('{} is not streaming'.format(username))
+        return await context.send('{} is currently streaming'.format(username))
+
     @twitch.command(alias=['sub'])
     async def add(self, context, username):
-        endpoint = 'https://api.twitch.tv/helix/webhooks/hub'
-        topic = 'https://api.twitch.tv/helix/streams'
+        endpoint = '%s/webhooks/hub' % self.api
+        topic = '%s/streams' % self.api
 
         user_id = self.get_user_id(username)
         if not user_id:
             return False
 
         payload = {
-            'hub.callback': self.callback,
+            'hub.callback': '{}/callback'.format(self.config.get('bot_host')),
             'hub.mode': 'subscribe',
             'hub.topic': '{}?user_id={}'.format(topic, user_id),
         }
         res = requests.post(endpoint, params=payload, headers=self.headers)
-        print(self.callback, user_id, payload, res)
+        print(res.status_code)
+        await context.send('{} added'.format(username))
 
     @twitch.command(alias=['unsub', 'del'])
     async def delete(self, context):
         pass
 
     def get_user_id(self, username):
-        endpoint = 'https://api.twitch.tv/helix/users?login={}'.format(username)
+        endpoint = '{}/users?login={}'.format(self.api, username)
         res = requests.get(endpoint, headers=self.headers).json()
         if not res['data']:
             return False
         return res['data'][0]['id']
 
     async def callback(self, request):
-        print(request)
-        return json({}, status=200)
-        # if request.headers['Authorization'] == self.config.get('bot_auth'):
-        #     channel = self.bot.get_channel(res['channel'])
-        #     await channel.send(res['msg'])
-        #     return json({"success": 1}, status=200)
-        # return json({"success": 0}, status=404)
+        challenge = request.args.get('hub.challenge')
+        return response.html(challenge, status=200)
+
+    async def handle(self, request):
+        print(request.args)
+        return response.html('', status=200)
 
 
 def setup(bot):
     twitch = Twitch(bot)
     bot.add_cog(twitch)
     bot.api.add_route(twitch.callback, '/callback', methods=['GET'])
+    bot.api.add_route(twitch.handle, '/callback', methods=['POST'])

@@ -94,7 +94,7 @@ class Subscription():
         self.subreddit = subreddit
 
 config = config.Config('config/bot.json')
-sub = Subscriptions(endpoint=config.get('bot_endpoint'),
+sub = Subscriptions(endpoint='{}/say'.format(config.get('bot_host')),
                     auth=config.get('bot_auth'),
                     client_id=config.get('reddit_id'),
                     client_secret=config.get('reddit_secret'),
