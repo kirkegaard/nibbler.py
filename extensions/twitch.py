@@ -13,6 +13,8 @@ class Twitch():
         self.config = config.Config('config/bot.json')
         self.headers = {"Client-ID": self.config.get('twitch_id')}
         self.api = 'https://api.twitch.tv/helix'
+        #self.channel = 482186488340283402
+        self.channel = 483727348596998144
 
     @commands.group()
     async def twitch(self, context):
@@ -40,6 +42,7 @@ class Twitch():
         payload = {
             'hub.callback': '{}/callback'.format(self.config.get('bot_host')),
             'hub.mode': 'subscribe',
+            'hub.lease_seconds': 864000,
             'hub.topic': '{}?user_id={}'.format(topic, user_id),
         }
         res = requests.post(endpoint, params=payload, headers=self.headers)
@@ -50,6 +53,13 @@ class Twitch():
     async def delete(self, context):
         pass
 
+    def get_user(self, user_id):
+        endpoint = '{}/users?id={}'.format(self.api, user_id)
+        res = requests.get(endpoint, headers=self.headers).json()
+        if not res['data']:
+            return False
+        return res['data'][0]
+
     def get_user_id(self, username):
         endpoint = '{}/users?login={}'.format(self.api, username)
         res = requests.get(endpoint, headers=self.headers).json()
@@ -59,11 +69,17 @@ class Twitch():
 
     async def callback(self, request):
         challenge = request.args.get('hub.challenge')
-        return response.html(challenge, status=200)
+        return response.text(challenge, status=200)
 
     async def handle(self, request):
-        print(request.args)
-        return response.html('', status=200)
+        data = request.json['data']
+        if not data:
+            return False
+        user_id = data[0]['user_id']
+        channel = self.bot.get_channel(self.channel)
+        user = self.get_user(user_id)
+        await channel.send('{u[display_name]} is streaming at https://twitch.tv/{u[login]}'.format(u=user))
+        return response.text('', status=200)
 
 
 def setup(bot):
