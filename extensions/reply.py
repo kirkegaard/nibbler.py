@@ -24,7 +24,7 @@ class Reply():
         self.bot = bot
 
     async def on_message(self, context):
-        first = context.content.split(' ')[0]
+        first = context.content.split(' ')[0].lower()
         if first in REPLYS:
             reply = random.choice(REPLYS[first])
             await context.channel.send(reply)
