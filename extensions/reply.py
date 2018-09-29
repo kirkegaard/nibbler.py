@@ -9,6 +9,12 @@ REPLYS = {
         'Sov godt søtte',
         'Drøm om mig <3'
     ],
+    'godmorgen': [
+        'Godmorgen hvennemand'
+    ],
+    'godaften': [
+        'Godaften kammerat'
+    ],
     'goddag': [
         'Hej ven <3',
         'Hvordan har du det?',
@@ -24,6 +30,9 @@ class Reply():
         self.bot = bot
 
     async def on_message(self, context):
+        if context.author.mention == self.bot.user.mention:
+            return
+
         first = context.content.split(' ')[0].lower()
         if first in REPLYS:
             reply = random.choice(REPLYS[first])
