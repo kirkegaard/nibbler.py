@@ -7,5 +7,5 @@ spotipy
 tvtid
 youtube_dl
 urbandictionary
-sanic
+sanic==0.7.0
 praw

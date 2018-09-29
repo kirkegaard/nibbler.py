@@ -1,23 +1,25 @@
 import discord
 from discord.ext import commands
 from utils import config
+from cobe.brain import Brain
 import random
 
+brain = Brain("tmp/nibbler.brain")
 REPLYS = {
     'godnat': [
         'Godnat ven :*',
-        'Sov godt søtte',
+        'Sov godt søtte!',
         'Drøm om mig <3'
     ],
     'godmorgen': [
-        'Godmorgen hvennemand'
+        'Godmorgen hvennemand!'
     ],
     'godaften': [
-        'Godaften kammerat'
+        'Godaften kammerat!'
     ],
     'goddag': [
         'Hej ven <3',
-        'Hvordan har du det?',
+        'Goddag knægt!',
         'Godt at se dig søtte!',
         'Du ser godt ud i dag :D'
     ]
@@ -36,6 +38,9 @@ class Reply():
         first = context.content.split(' ')[0].lower()
         if first in REPLYS:
             reply = random.choice(REPLYS[first])
+
+            if random.randint(0,100) > 70:
+                reply = '{} {}'.format(reply, brain.reply(reply))
             await context.channel.send(reply)
 
 def setup(bot):
