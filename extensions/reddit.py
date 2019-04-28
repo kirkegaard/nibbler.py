@@ -24,7 +24,7 @@ class Reddit():
             return
 
         res = []
-        for x in range(1, count):
+        for x in range(0, count):
             endpoint = 'http://reddit.com/r/{}/random/.json'.format(subreddits)
 
             with requests_cache.disabled():
