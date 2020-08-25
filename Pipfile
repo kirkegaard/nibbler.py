@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+discord-py = "~=1.0.0"
+master = {editable = true,git = "https://github.com/chauffer/cobe"}
+google-api-python-client = "*"
+requests = "*"
+imdbpie = "*"
+spotipy = "*"
+tvtid = "*"
+youtube-dl = "*"
+urbandictionary = "*"
+sanic = "*"
+praw = "*"
+currencyconverter = "*"
+
+[scripts]
+bot = "python bot.py"
+
+[requires]
+python_version = "3.6.1"

@@ -3,7 +3,7 @@ from discord.ext import commands
 from utils import config as db
 
 
-class Mention():
+class Mention(Cog):
 
     def __init__(self, bot):
         self.bot = bot

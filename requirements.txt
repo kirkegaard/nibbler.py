@@ -9,3 +9,4 @@ youtube_dl
 urbandictionary
 sanic==0.7.0
 praw
+currencyconverter
