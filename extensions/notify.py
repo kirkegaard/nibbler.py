@@ -1,7 +1,4 @@
-import discord
 import logging
-import pprint
-
 from utils import config as db
 from datetime import datetime
 from discord.ext import commands
@@ -9,11 +6,10 @@ from discord.ext import commands
 log = logging.getLogger(__name__)
 
 
-class Notify():
-
+class Notify:
     def __init__(self, bot):
         self.bot = bot
-        self.db = db.Config('tmp/notifications.json')
+        self.db = db.Config("tmp/notifications.json")
 
     async def on_message(self, context):
         notifications = self.db.get(context.author.mention)
@@ -21,8 +17,11 @@ class Notify():
             return
 
         for n in notifications:
-            await context.author.send("[notification]: {} ({}) wrote: {}".format(
-                n['author'], n['date'], n['msg']))
+            await context.author.send(
+                "[notification]: {} ({}) wrote: {}".format(
+                    n["author"], n["date"], n["msg"]
+                )
+            )
 
         await self.db.put(context.author.mention, [])
 
@@ -35,8 +34,8 @@ class Notify():
         data = {
             "member": member,
             "author": context.author.mention,
-            "msg": ' '.join(msg),
-            "date": datetime.now().strftime('%d. %b %H:%M')
+            "msg": " ".join(msg),
+            "date": datetime.now().strftime("%d. %b %H:%M"),
         }
 
         notifications = self.db.get(member)

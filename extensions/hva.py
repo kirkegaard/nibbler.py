@@ -4,29 +4,31 @@ from random import randint
 from discord.ext import commands
 
 
-class Hva():
-
+class Hva(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.latest = collections.defaultdict(dict)
 
+    @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.mention == self.bot.user.mention:
+        if message.author == self.bot.user:
             return
 
         channel = message.channel.id
-        hva = tuple(['hva', 'hva?', 'ahva', 'ahva?', 'hvad', 'hvad?'])
+        hva = tuple(["hva", "hva?", "ahva", "ahva?", "hvad", "hvad?"])
 
         if message.content.startswith(hva) and message.content.endswith(hva):
             if not self.latest[channel]:
                 return
 
-            await message.channel.send('{} HAN SAGDE: {}'.format(
-                message.author.mention,
-                self.latest[channel]['content'].upper()))
+            await message.channel.send(
+                "{} HAN SAGDE: {}".format(
+                    message.author.mention, self.latest[channel]["content"].upper()
+                )
+            )
         else:
-            self.latest[channel]['mention'] = message.author.mention
-            self.latest[channel]['content'] = message.content
+            self.latest[channel]["mention"] = message.author.mention
+            self.latest[channel]["content"] = message.content
 
 
 def setup(bot):
