@@ -10,6 +10,7 @@ EXTENSIONS = [
     "brain",
     "channel_events",
     "dadjoke",
+    "foldingathome",
     "guess",
     "hva",
     "lastfm",
