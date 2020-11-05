@@ -2,6 +2,8 @@ import discord
 import logging
 import settings
 import sys
+
+from os import environ
 from discord.ext import commands
 from importlib import import_module, reload
 
@@ -29,4 +31,4 @@ for extension in settings.EXTENSIONS:
         raise e
 
 
-bot.run(settings.DISCORD_TOKEN)
+bot.run(environ.get("DISCORD_TOKEN"))

@@ -17,6 +17,7 @@ EXTENSIONS = [
     "reddit",
     "reply",
     "rng",
+    "search",
     "timer",
     "tvtid",
     "urbandictionary",
@@ -24,6 +25,3 @@ EXTENSIONS = [
     "wttr",
     "yourmom",
 ]
-
-# Tokens
-DISCORD_TOKEN = environ.get("DISCORD_TOKEN")

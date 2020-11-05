@@ -12,6 +12,9 @@ requests = "*"
 requests-cache = "*"
 fuzzywuzzy = "*"
 tvtid = "*"
+youtube-search-python = "*"
+imdbpie = "*"
+spotipy = "*"
 
 [scripts]
 bot = "python bot.py"
