@@ -9,6 +9,7 @@ EXTENSION_PATH = "extensions"
 EXTENSIONS = [
     "brain",
     "channel_events",
+    "crypto",
     "dadjoke",
     "foldingathome",
     "guess",
